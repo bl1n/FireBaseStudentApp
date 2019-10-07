@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">FireBaseStudentApp</string>
+    <string name="logout">Logout</string>
+    <string name="auth_error">Ошибка аутентификации</string>
+</resources>
