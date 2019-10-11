@@ -60,8 +60,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void startSecondActivity() {
-        Intent intent = new Intent(this, ChatActivity.class);
-        startActivity(intent);
+        ChatActivity.start(this);
+        finish();
+//        Intent intent = new Intent(this, ChatActivity.class);
+//        startActivity(intent);
     }
 
     public static void start(Context context) {

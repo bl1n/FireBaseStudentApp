@@ -2,13 +2,13 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:elevation="0dp"
-    android:padding="20dp">
+
+    >
 
     <androidx.cardview.widget.CardView
-
+        android:padding="10dp"
         android:id="@+id/card"
         android:layout_width="282dp"
         android:layout_height="wrap_content"
@@ -19,10 +19,10 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent">
 
             <TextView
-                android:id="@+id/TvItemUserName"
+                android:id="@+id/tvItemUserName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
@@ -32,38 +32,28 @@
                 android:text="@string/name_sample" />
 
             <TextView
-                android:id="@+id/TvItemDate"
+                android:id="@+id/tvItemDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_marginStart="88dp"
                 android:layout_marginTop="12dp"
-                android:layout_toEndOf="@+id/TvItemUserName"
+                android:layout_toEndOf="@+id/tvItemUserName"
                 android:text="@string/date_sample" />
 
             <TextView
-                android:id="@+id/textView"
+                android:id="@+id/tvItemText"
                 android:layout_width="248dp"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/TvItemUserName"
-                android:layout_alignEnd="@+id/TvItemDate"
+                android:layout_below="@+id/tvItemUserName"
+                android:layout_alignEnd="@+id/tvItemDate"
                 android:layout_alignParentStart="true"
                 android:layout_marginStart="18dp"
                 android:layout_marginTop="9dp"
                 android:text="@string/lorem" />
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardForAngle"
 
-                android:layout_width="269dp"
-                android:layout_height="11dp"
-                android:layout_below="@+id/textView"
-                android:layout_alignEnd="@+id/TvItemUserName"
-                android:layout_marginEnd="-164dp"
-                app:cardCornerRadius="0dp"
-                app:cardElevation="10dp">
 
-            </androidx.cardview.widget.CardView>
         </RelativeLayout>
 
 

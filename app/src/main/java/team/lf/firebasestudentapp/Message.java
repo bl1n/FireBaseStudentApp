@@ -10,6 +10,10 @@ public class Message implements Serializable{
     private String mText;
     private Timestamp mTimestamp;
 
+    public Message() {
+        this("", "");
+    }
+
     public Message(String userName, String text) {
         mUserName = userName;
         mText = text;
