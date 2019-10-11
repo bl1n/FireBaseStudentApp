@@ -22,7 +22,7 @@ public class MessagesAdapter extends ListAdapter<Message, ChatViewHolder> {
         }
     };
 
-    protected MessagesAdapter(@NonNull DiffUtil.ItemCallback<Message> diffCallback) {
+    MessagesAdapter() {
         super(DIFF_CALLBACK);
     }
 

@@ -1,6 +1,5 @@
 package team.lf.firebasestudentapp;
 
-import android.accessibilityservice.FingerprintGestureController;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -23,27 +22,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.firestore.DocumentChange;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class ChatActivity extends AppCompatActivity {
     private static final String TAG = "ChatActivity";
 
-    private TextView mUserNameTextView;
     private EditText mEtMessage;
     private Button mBtnSendMessage;
 
     private RecyclerView mRecycler;
 
-//    private ChatAdapter mAdapter;
     private MessagesAdapter mAdapter;
 
 
@@ -89,26 +77,22 @@ public class ChatActivity extends AppCompatActivity {
             hideKeyboard(this);
         });
 
-        updateAdapter(db);
+//        updateAdapter(db);
 
-//        db.collection("messages")
-//                .addSnapshotListener((snapshot, e) -> {
-//                    if (e != null) {
-//                        Log.w(TAG, "Listen failed.", e);
-//                        return;
-//                    }
-//                    if (snapshot != null) {
-//                        Log.d(TAG, "Current data: " + snapshot.getDocumentChanges());
-//                        for (DocumentChange documentChange:snapshot.getDocumentChanges()){
-//                            Message message = documentChange.getDocument().toObject(Message.class);
-//                            mAdapter.addMessage(message);
-//                        }
-//
-//                    } else {
-//                        Log.d(TAG, "Current data: null");
-//                    }
-//
-//                });
+        db.collection("messages")
+                .addSnapshotListener((snapshot, e) -> {
+                    if (e != null) {
+                        Log.w(TAG, "Listen failed.", e);
+                        return;
+                    }
+                    if (snapshot != null) {
+                        Log.d(TAG, "Current data: " + snapshot.getDocumentChanges());
+                        mAdapter.submitList(snapshot.toObjects(Message.class));
+                    } else {
+                        Log.d(TAG, "Current data: null");
+                    }
+
+                });
 
 
 
@@ -120,24 +104,6 @@ public class ChatActivity extends AppCompatActivity {
 //        java.util.Date date = timestamp.toDate();
     }
 
-    private void updateAdapter(FirebaseFirestore db) {
-//        mAdapter.clear();
-        db.collection("messages")
-                .get()
-                .addOnCompleteListener(task -> {
-                    Log.d(TAG, "onCreate: task");
-                    if (task.isSuccessful()) {
-                        for (QueryDocumentSnapshot document : task.getResult()) {
-                            Message message = document.toObject(Message.class);
-                            mAdapter.addMessage(message);
-                        }
-                    } else {
-                        Log.e(TAG, "Error getting documents.", task.getException());
-                    }
-                });
-        Log.d(TAG, "onCreate: task1");
-
-    }
 
 
     public static void start(Context context) {
