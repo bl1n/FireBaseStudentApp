@@ -38,7 +38,7 @@
                 android:layout_width="63dp"
                 android:layout_height="wrap_content"
                 android:layout_alignTop="@+id/tvItemUserName"
-                android:layout_marginStart="129dp"
+                android:layout_marginStart="29dp"
                 android:layout_marginTop="1dp"
                 android:layout_toEndOf="@+id/tvItemUserName"
                 android:text="@string/date_sample"
@@ -47,16 +47,17 @@
 
             <TextView
                 android:id="@+id/tvItemText"
-                android:layout_width="248dp"
+                android:layout_width="246dp"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tvItemUserName"
-                android:layout_alignEnd="@+id/tvItemDate"
                 android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true"
                 android:layout_marginStart="18dp"
                 android:layout_marginTop="9dp"
+                android:layout_marginEnd="18dp"
                 android:layout_marginBottom="9dp"
                 android:text="@string/lorem"
-                android:textColor="@color/primary_text"/>
+                android:textColor="@color/primary_text" />
 
 
         </RelativeLayout>

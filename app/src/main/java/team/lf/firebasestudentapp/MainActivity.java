@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
                     .createSignInIntentBuilder()
                     .setAvailableProviders(providers)
                     .setTheme(R.style.AppTheme)
-                    .setLogo(R.drawable.hello)
+                    .setLogo(R.drawable.firebase_lockup_400)
                     .build(), RC_SIGN_IN);
         } else {
             startSecondActivity();
