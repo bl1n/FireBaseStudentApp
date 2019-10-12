@@ -3,7 +3,6 @@ package team.lf.firebasestudentapp;
 import com.google.firebase.Timestamp;
 
 import java.io.Serializable;
-import java.util.Date;
 
 public class Message implements Serializable{
     private String mUserName;
@@ -14,10 +13,10 @@ public class Message implements Serializable{
         this("", "");
     }
 
-    public Message(String userName, String text) {
+    Message(String userName, String text) {
         mUserName = userName;
         mText = text;
-        mTimestamp = new Timestamp(new Date());
+        mTimestamp = Timestamp.now();
     }
 
     public String getUserName() {

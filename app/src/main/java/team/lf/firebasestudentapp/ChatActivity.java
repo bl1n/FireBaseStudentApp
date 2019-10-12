@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -22,17 +21,26 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.firebase.ui.auth.AuthUI;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.ListenerRegistration;
+import com.google.firebase.firestore.QuerySnapshot;
 
-public class ChatActivity extends AppCompatActivity {
+import java.util.Collections;
+import java.util.List;
+
+public class ChatActivity extends AppCompatActivity  implements EventListener<QuerySnapshot>{
     private static final String TAG = "ChatActivity";
 
     private EditText mEtMessage;
-    private Button mBtnSendMessage;
 
     private RecyclerView mRecycler;
 
     private MessagesAdapter mAdapter;
+    private ListenerRegistration registration;
+    private CollectionReference mReference;
 
 
     @Override
@@ -47,8 +55,9 @@ public class ChatActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chat);
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
+        mReference = db.collection("messages");
 
-        mBtnSendMessage = findViewById(R.id.btn_send_message);
+        Button btnSendMessage = findViewById(R.id.btn_send_message);
         mEtMessage = findViewById(R.id.et_message);
         mAdapter = new MessagesAdapter();
 
@@ -56,10 +65,11 @@ public class ChatActivity extends AppCompatActivity {
         mRecycler.setLayoutManager(new LinearLayoutManager(this));
         mRecycler.setAdapter(mAdapter);
 
-        mBtnSendMessage.setOnClickListener(v -> {
+
+        btnSendMessage.setOnClickListener(v -> {
             if (mEtMessage.getText().toString().trim().length() != 0 && user != null) {
                 Message message = new Message(user.getDisplayName(), mEtMessage.getText().toString());
-                db.collection("messages")
+                mReference
                         .add(message)
                         .addOnSuccessListener(documentReference -> {
                             Log.d(TAG, "message is sent");
@@ -77,34 +87,16 @@ public class ChatActivity extends AppCompatActivity {
             hideKeyboard(this);
         });
 
-//        updateAdapter(db);
+        registerListener();
 
-        db.collection("messages")
-                .addSnapshotListener((snapshot, e) -> {
-                    if (e != null) {
-                        Log.w(TAG, "Listen failed.", e);
-                        return;
-                    }
-                    if (snapshot != null) {
-                        Log.d(TAG, "Current data: " + snapshot.getDocumentChanges());
-                        mAdapter.submitList(snapshot.toObjects(Message.class));
-                    } else {
-                        Log.d(TAG, "Current data: null");
-                    }
-
-                });
-
-
-
-//        mUserNameTextView = findViewById(R.id.tv_username);
-//        if (user != null) {
-//            mUserNameTextView.setText(user.getDisplayName());
-//        }
-//        Timestamp timestamp = snapshot.getTimestamp("created_at");
-//        java.util.Date date = timestamp.toDate();
+    }
+    public void registerListener(){
+        registration = mReference.addSnapshotListener(this);
     }
 
-
+    public void unregisterListener(){
+        registration.remove();
+    }
 
     public static void start(Context context) {
         if (context != null) {
@@ -117,28 +109,28 @@ public class ChatActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_second, menu);
+        getMenuInflater().inflate(R.menu.logout, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.mi_logout: {
-                logout();
-                return true;
-            }
+        if (item.getItemId() == R.id.mi_logout) {
+            logout();
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }
 
     private void logout() {
+        unregisterListener();
         AuthUI.getInstance()
                 .signOut(getApplicationContext())
                 .addOnCompleteListener(task -> {
                     MainActivity.start(getApplicationContext());
                     finish();
                 });
+
     }
 
     public static void hideKeyboard(Activity activity) {
@@ -151,6 +143,22 @@ public class ChatActivity extends AppCompatActivity {
         }
         if (imm != null) {
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+    }
+
+    @Override
+    public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+        if (e != null) {
+            Log.e(TAG, "Listen failed.", e);
+            return;
+        }
+        if (queryDocumentSnapshots != null) {
+            List<Message> list = queryDocumentSnapshots.toObjects(Message.class);
+            Collections.sort(list, (o1, o2) -> Long.compare(o1.getTimestamp().getSeconds(), o2.getTimestamp().getSeconds()));
+            mAdapter.submitList(list);
+            mRecycler.smoothScrollToPosition(mAdapter.getItemCount());
+        } else {
+            Log.d(TAG, "Current data: null");
         }
     }
 }
