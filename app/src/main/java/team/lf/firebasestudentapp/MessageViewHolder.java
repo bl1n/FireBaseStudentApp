@@ -31,7 +31,7 @@ class MessageViewHolder extends RecyclerView.ViewHolder {
         mText.setText(message.getText());
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if(user!=null && user.getDisplayName()!=null && user.getDisplayName().equals(message.getUserName())){
-            ((CardView)itemView.findViewById(R.id.card)).setCardBackgroundColor(Color.GREEN);
+            ((CardView)itemView.findViewById(R.id.card)).setCardBackgroundColor(itemView.getResources().getColor(R.color.primary_light));
         }
     }
 }

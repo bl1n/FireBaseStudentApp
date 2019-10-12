@@ -9,7 +9,7 @@
     </style>
     <style name="AppTheme.Auth">
         <item name="android:colorBackground">@color/fui_bgGitHub</item>
-
     </style>
+
 
 </resources>
